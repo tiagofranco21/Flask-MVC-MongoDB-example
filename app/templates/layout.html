@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	{% include '/includes/seo.html' %}
+
+	<!-- Bootstrap 3.3.7 -->
+	{% assets "main_css" %}
+		<link rel="stylesheet" href="{{ ASSET_URL }}" type="text/css">
+	{% endassets %}
+
+	<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+</head>
+<body class="hold-transition skin-black sidebar-mini">
+	{% macro render_navigation(pagination, endpoint) %}
+		<ul class="pagination pagination-sm no-margin pull-right">
+			{% for page in pagination.iter_pages() %}
+				{% if page %}
+					{% if page != pagination.page %}
+						<li><a href="{{ url_for(endpoint, page=page) }}">{{ page }}</a></li>
+					{% else %}
+						<li class="active"><a href="#"><strong>{{ page }}</strong></a></li>
+						
+					{% endif %}
+				{% endif %}
+			{% endfor %}
+		</ul>
+	{% endmacro %}
+	<div class="wrapper">
+
+		<header class="main-header">
+			<!-- Logo -->
+			<a href="/" class="logo">
+				<!-- mini logo for sidebar mini 50x50 pixels -->
+				<span class="logo-mini"><b>A</b>LT</span>
+				<!-- logo for regular state and mobile devices -->
+				<span class="logo-lg"><b>Admin</b>LTE</span>
+			</a>
+			<!-- Header Navbar: style can be found in header.less -->
+			<nav class="navbar navbar-static-top">
+				<!-- Sidebar toggle button-->
+				<a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+					<span class="sr-only">Toggle navigation</span>
+				</a>
+
+				<div class="navbar-custom-menu">
+					<ul class="nav navbar-nav">
+						<!-- Messages: style can be found in dropdown.less-->
+						
+						<!-- User Account: style can be found in dropdown.less -->
+						<li class="dropdown user user-menu">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+								<span class="hidden-xs"><i class="fa fa-user"></i> {{ USER.name }}</span>
+							</a>
+							<ul class="dropdown-menu">
+								<!-- User image -->
+								<li><a href="{{url_for('change_password')}}"><i class="fa fa-key"></i> <span>Change Password</span></a></li>
+								
+								<!-- Menu Footer-->
+								<li>
+									<a href="{{url_for('logout')}}"><i class="fa fa-sign-out"></i> <span>Logout</span></a>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</nav>
+		</header>
+		<!-- Left side column. contains the logo and sidebar -->
+		<aside class="main-sidebar">
+			<!-- sidebar: style can be found in sidebar.less -->
+			<section class="sidebar">
+				
+				<!-- sidebar menu: : style can be found in sidebar.less -->
+				<ul class="sidebar-menu" data-widget="tree">
+					<li><a href="{{url_for('dashboard')}}"><i class="fa fa-home"></i> <span>Home</span></a></li>
+					
+					{% if USER.getRoleName() == 'MASTER' %}
+						<li><a href="{{url_for('users')}}"><i class="fa fa-users"></i> <span>Users</span></a></li>
+					{% endif %}
+				</ul>
+			</section>
+			<!-- /.sidebar -->
+		</aside>
+
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Content Header (Page header) -->
+			<section class="content-header">
+				<h1>
+					{{APP_SETTINGS['title']}}
+					<small>Control panel</small>
+				</h1>
+				
+				<ol class="breadcrumb">
+					{%- for breadcrumb in breadcrumbs -%}
+						<li><a href="{{ breadcrumb.url }}">{{ breadcrumb.text }}</a></li>
+						
+					{%- endfor -%}
+					<!-- <li class="active">Dashboard</li> -->
+				</ol>
+			</section>
+
+			<!-- Main content -->
+			<section class="content">
+				{% include '/includes/messages.html' %}
+
+                {% block body %}{% endblock %}
+            </section>
+		</div>
+		<!-- /.content-wrapper -->
+		<footer class="main-footer">
+			<div class="pull-right hidden-xs">
+				<b>Version</b> 2.4.0
+			</div>
+			<strong>Copyright &copy; 2014-2016 <a href="https://adminlte.io">Almsaeed Studio</a>.</strong> All rights
+			reserved.
+		</footer>
+	</div>
+	<!-- ./wrapper -->
+	{% assets "main_js" %}
+		<script src="{{ ASSET_URL }}"></script>
+	{% endassets %}
+</body>
+</html>
